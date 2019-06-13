@@ -1,0 +1,72 @@
+﻿@model SinExWebApp20328800.ViewModels.ServicePackageFeesViewModel
+
+@{
+    ViewBag.Title = "Service/Package Fees";
+}
+
+<h2>Service/Package Fees</h2>
+<hr />
+
+@using (Html.BeginForm("index", "ServicePackageFees", FormMethod.Get))
+{
+    <div class="form-group">
+        <div class="col-md-7">
+            @Html.DropDownListFor(a => a.CurrencyCode, new SelectList(new List<string> { "CNY", "HKD", "TWD", "MOP" }).ToList(), new { @Value = ViewBag.currentCurrencyCode })
+            <input type="submit" value="Change Currency" />
+        </div>
+    </div>
+}
+
+<h3>Currency: @Model.CurrencyCode &nbsp; &nbsp; &nbsp; Rate: @Model.Rate</h3>
+<table class="table">
+    <tr>
+        <td></td>
+        <th colspan="5">
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            Package Types
+        </th>
+    </tr>
+    <tr>
+        <th>
+            Service Type
+        </th>
+        <td colspan="5"></td>
+    </tr>
+    <tr>
+        <th></th>
+        @foreach (string pt in Model.PackageTypes)
+        {
+            <th>
+                @pt
+            </th>
+        }
+    </tr>
+    @foreach (string st in Model.ServiceTypes)
+    {
+        <tr>
+            <td>
+                @st
+            </td>
+            @foreach (string pt in Model.PackageTypes)
+            {
+                <td>
+                    @foreach (var item in Model.Fees)
+                    {
+                        if (item.ServiceType.Type == st && item.PackageType.Type == pt)
+                        {
+                            @Html.DisplayFor(modelItem => item.Fee)
+                            if (item.PackageType.Type != "Envelope")
+                            {
+                                 <text>/kg ( </text>@Html.DisplayFor(modelItem => item.MinimumFee)<text> min. )</text>
+                            }
+                        }
+                    }
+                </td>
+            }
+        </tr>
+    }
+</table>
+
+<p>
+    Warnimg: If a package's weight exceed the weight limit for the specific package type, a penalty charge will be applied to it.
+</p>

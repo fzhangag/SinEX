@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Create Pickup Location Fail";
+}
+
+<h2>CreateFail</h2>
+
+@if (ViewBag.nickname_duplicate)
+{
+    <p>
+        Sorry, duplicate nickname.
+    </p>
+}
+
+@if (ViewBag.general_duplicate)
+{
+    <p>
+        Sorry, duplicate location.
+    </p>
+}
+
+<div>
+    @Html.ActionLink("Create again", "Create")
+</div>
